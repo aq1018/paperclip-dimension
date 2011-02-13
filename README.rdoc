@@ -1,6 +1,69 @@
 = mongoid_paperclip_image_dimension
 
-Description goes here.
+This is a simple gem to persist image dimensions of originals and thumbnails for mongoid documents.
+It works for both s3 and filesystem storages.
+This lib is based on this article: http://stackoverflow.com/questions/4065295/paperclip-saving-the-images-dimentions-width-height
+
+== Installation
+
+You can simply install from rubygems:
+
+  gem install mongoid_paperclip_image_dimension
+
+or in Gemfile:
+
+  gem 'mongoid_paperclip_image_dimension'
+  
+== Basic Usage
+
+  class Post
+    include Mongoid::Document
+    include Mongoid::Paperclip
+    include Mongoid::Paperclip::ImageDimension
+    
+    has_mongoid_attached_file :image, :styles => {
+      :large    =>    ['350x350>',     :jpg],
+      :medium   =>    ['150x150>',     :jpg],
+      :small    =>    ['30x30>',       :jpg]
+    }
+    
+    has_mongoid_attached_file :some_other_image, :styles => {
+      :large    =>    ['350x350>',     :jpg],
+      :medium   =>    ['150x150>',     :jpg],
+      :small    =>    ['30x30>',       :jpg]
+    }
+    
+    # This will save all dimensions of images and thumbnails for both :image and :another_image
+    save_image_dimensions_on :image, :another_image
+  end
+  
+  # retrieve image dimensions
+  p = Post.first
+  p.image_dimensions    # If the original image has width of 2048 and height of 1024, the output should be:
+                        #   {
+                        #     'original' => [2048, 1024],
+                        #     'large'    => [350, 175],
+                        #     'medium'   => [150, 75],
+                        #     'small'    => [30, 15]
+                        #   }
+                        
+  p.another_image_dimensions    # If the original image has width of 2048 and height of 1024, the output should be:
+                                #   {
+                                #     'original' => [2048, 1024],
+                                #     'large'    => [350, 175],
+                                #     'medium'   => [150, 75],
+                                #     'small'    => [30, 15]
+                                #   }
+  }
+  
+  # some sugar:
+  p.image_dimension               # [2048, 1024]
+  p.image_dimension(:original)    # [2048, 1024]
+  p.image_dimension(:large)       # [350, 175]
+  
+  p.image_dimension_str             # "2048x1024"
+  p.image_dimension_str(:original)  # "2048x1024"
+  p.image_dimension_str(:large)     # "350x175"
 
 == Contributing to mongoid_paperclip_image_dimension
  
