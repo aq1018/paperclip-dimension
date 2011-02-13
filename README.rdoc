@@ -27,7 +27,7 @@ or in Gemfile:
       :small    =>    ['30x30>',       :jpg]
     }
     
-    has_mongoid_attached_file :some_other_image, :styles => {
+    has_mongoid_attached_file :another_image, :styles => {
       :large    =>    ['350x350>',     :jpg],
       :medium   =>    ['150x150>',     :jpg],
       :small    =>    ['30x30>',       :jpg]
