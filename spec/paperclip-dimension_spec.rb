@@ -7,8 +7,6 @@ describe Paperclip::Dimension do
      :another_image => File.open(File.dirname(__FILE__) + '/ruby.png')
     })
     @p.reload
-
-    p @p.image_dimensions
   end
 
   it "should save dimensions" do
