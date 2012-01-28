@@ -1,72 +1,106 @@
-= mongoid_paperclip_image_dimension
+= paperclip-dimension
 
-This is a simple gem to persist image dimensions of originals and thumbnails for mongoid documents.
+This gem is the improved version of `mongoid_paperclip_image_dimension` that is ORM agnostic.
+If you are using `mongoid_paperclip_image_dimension`, you should upgrade to this gem.
+
+This is a simple gem to persist image dimensions of originals and thumbnails.
 It works for both s3 and filesystem storages.
-This lib is based on this article: http://stackoverflow.com/questions/4065295/paperclip-saving-the-images-dimentions-width-height
+This lib is based on this article:
 
-== Installation
+http://stackoverflow.com/questions/4065295/paperclip-saving-the-images-dimentions-width-height
+
+== Setup
 
 You can simply install from rubygems:
 
-  gem install mongoid_paperclip_image_dimension
+  gem install paperclip-dimension
+  require 'paperclip-dimension'
 
 or in Gemfile:
 
-  gem 'mongoid_paperclip_image_dimension'
-  
-== Basic Usage
+  gem 'paperclip-dimension'
+
+=== General Setup
+
+You need to make sure the following is in place:
+
+# `Paperclip::Glue` is included in your model.
+# `<attachment>_dimensions` attribute is requried to operate.
+
+=== Rails & ActiveRecord Migration
+
+`paperclip` gives you the ability to create migrations with `has_attached_file`.
+For example:
+
+  class CreatePosts < ActiveRecord::Migration
+    def up
+      create_table :posts do |t|
+        t.has_attached_file :image
+      end
+    end
+  end
+
+This creates the following columns:
+
+* image_file_name
+* image_file_size
+* image_content_type
+* image_updated_at
+
+`paperclip-dimension` will create an extra field for you: `image_dimensions` when the above migration is run.
+
+=== Mongoid
+
+Exmaple Mongoid setup:
 
   class Post
     include Mongoid::Document
-    include Mongoid::Paperclip
-    include Mongoid::Paperclip::ImageDimension
-    
-    has_mongoid_attached_file :image, :styles => {
+    include Paperclip::Glue
+
+    # The usual paperclip fields
+    field :image_file_name,     :type => String
+    field :image_file_size,     :type => Integer
+    field :image_content_type,  :type => String
+    field :image_updated_at,    :type => Time
+
+    # The extra paperclip-dimension field
+    field :image_dimensions,    :type => Hash
+
+    # call #has_attached_file like usual
+    has_attached_file :image, :styles => {
       :large    =>    ['350x350>',     :jpg],
       :medium   =>    ['150x150>',     :jpg],
       :small    =>    ['30x30>',       :jpg]
     }
-    
-    has_mongoid_attached_file :another_image, :styles => {
-      :large    =>    ['350x350>',     :jpg],
-      :medium   =>    ['150x150>',     :jpg],
-      :small    =>    ['30x30>',       :jpg]
-    }
-    
-    # This will save all dimensions of images and thumbnails for both :image and :another_image
-    save_image_dimensions_on :image, :another_image
   end
-  
-  # retrieve image dimensions
+
+== Usage
+
+This gem gives your model a few extra helpers:
+
+  # suppose we used the example from above
   p = Post.first
-  p.image_dimensions    # If the original image has width of 2048 and height of 1024, the output should be:
-                        #   {
+
+  # retrieve image dimensions for all sytles
+  p.image_dimensions    #   {
                         #     'original' => [2048, 1024],
                         #     'large'    => [350, 175],
                         #     'medium'   => [150, 75],
                         #     'small'    => [30, 15]
                         #   }
-                        
-  p.another_image_dimensions    # If the original image has width of 2048 and height of 1024, the output should be:
-                                #   {
-                                #     'original' => [2048, 1024],
-                                #     'large'    => [350, 175],
-                                #     'medium'   => [150, 75],
-                                #     'small'    => [30, 15]
-                                #   }
-  }
-  
-  # some sugar:
+
+  # get image dimension as an array
   p.image_dimension               # [2048, 1024]
   p.image_dimension(:original)    # [2048, 1024]
   p.image_dimension(:large)       # [350, 175]
-  
+
+  # get it now as a string
   p.image_dimension_str             # "2048x1024"
   p.image_dimension_str(:original)  # "2048x1024"
   p.image_dimension_str(:large)     # "350x175"
 
-== Contributing to mongoid_paperclip_image_dimension
- 
+== Contributing to paperclip-dimension
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
