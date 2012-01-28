@@ -1,21 +1,61 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'rspec'
-require 'mongoid'
-require 'mongoid_paperclip'
-require 'mongoid_paperclip_image_dimension'
-require 'database_cleaner'
+require 'active_record'
+require 'paperclip'
+require 'paperclip-dimension'
+require 'paperclip/railtie'
 
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
+# mocking Rails.root & Rails.env used in Paperclip::Interploration
+module Rails
+  def self.root
+    File.dirname(__FILE__) + "/.."
   end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
+  def self.env
+    "test"
+  end
+
+  def self.logger
+    nil
   end
 end
 
-Mongoid.configure do |config|
-  config.master = Mongo::Connection.new.db("mongoid_paperclip_image_dimension_test")
+# need to manually call this
+Paperclip::Railtie.insert
+
+# turn off logging
+Paperclip.options[:log] = false
+
+# use sqlite3 memory store
+ActiveRecord::Base.establish_connection({
+  :adapter    =>    'sqlite3',
+  :database   =>    ':memory:'
+})
+
+# create tables
+ActiveRecord::Schema.define do
+  create_table :posts do |t|
+    t.has_attached_file :image
+    t.has_attached_file :another_image
+  end
 end
+
+# define model
+class Post < ActiveRecord::Base
+  extend Paperclip::Dimension::ClassMethods
+  has_attached_file :image, :styles => {
+    :large    =>    ['350x350>',     :jpg],
+    :medium   =>    ['150x150>',     :jpg],
+    :small    =>    ['30x30>',       :jpg]
+  }
+
+  has_attached_file :another_image, :styles => {
+    :large    =>    ['350x350>',     :jpg],
+    :medium   =>    ['150x150>',     :jpg],
+    :small    =>    ['30x30>',       :jpg]
+  }
+end
+
+

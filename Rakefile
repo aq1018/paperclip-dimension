@@ -11,12 +11,11 @@ require 'rake'
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "mongoid_paperclip_image_dimension"
-  gem.homepage = "http://github.com/aq1018/mongoid_paperclip_image_dimension"
+  gem.name = "paperclip-dimension"
+  gem.homepage = "http://github.com/aq1018/paperclip-dimension"
   gem.license = "MIT"
-  gem.summary = %Q{A simple plugin to persist image dimensions into mongoid document.}
-  gem.description = %Q{A simple plugin to persist image dimensions into mongoid document.}
+  gem.summary = %Q{A simple plugin to persist image dimensions.}
+  gem.description = %Q{A simple plugin to persist image dimensions.}
   gem.email = "aq1018@gmail.com"
   gem.authors = ["Aaron Qian"]
 
