@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "paperclip", '>= 2.4'
+gem "paperclip", '>= 3.0'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
