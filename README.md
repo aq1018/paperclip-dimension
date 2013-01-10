@@ -35,14 +35,14 @@ You need to make sure the following is in place:
 
 **Rails & ActiveRecord Migration**
 
-`paperclip` gives you the ability to create migrations with `has_attached_file`.
+`paperclip` gives you the ability to create migrations with `attachment`.
 For example:
 
 ```ruby
 class CreatePosts < ActiveRecord::Migration
   def up
     create_table :posts do |t|
-      t.has_attached_file :image
+      t.attachment :image
     end
   end
 end
