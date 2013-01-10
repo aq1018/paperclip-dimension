@@ -2,7 +2,6 @@ paperclip-dimension
 ===================
 
 This gem is the improved version of `mongoid_paperclip_image_dimension` that is ORM agnostic.
-If you are using `mongoid_paperclip_image_dimension`, you should upgrade to this gem.
 
 This is a simple gem to persist image dimensions of originals and thumbnails.
 It works for both s3 and filesystem storages.
