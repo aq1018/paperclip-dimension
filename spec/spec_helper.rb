@@ -35,8 +35,8 @@ ActiveRecord::Base.establish_connection({
 # create tables
 ActiveRecord::Schema.define do
   create_table :posts do |t|
-    t.has_attached_file :image
-    t.has_attached_file :another_image
+    t.attachment :image
+    t.attachment :another_image
   end
 end
 
