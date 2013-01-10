@@ -3,6 +3,7 @@ paperclip-dimension
 
 This gem used to be called `mongoid_paperclip_image_dimension`, but it has been improved to be ORM agnostic.
 Hence, the name of this gem is now simply `paperclip-dimension`.
+If you were using `mongoid_paperclip_image_dimension` before, you can safely upgrade to this gem.
 
 
 This is a simple gem to persist image dimensions of originals and thumbnails.
