@@ -58,6 +58,6 @@ module Paperclip
   end
 
   module Schema
-    @@columns[:dimensions] = :string
+    COLUMNS[:dimensions] = :string
   end
 end
