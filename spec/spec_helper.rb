@@ -5,7 +5,6 @@ require 'rspec'
 require 'active_record'
 require 'paperclip'
 require 'paperclip-dimension'
-require 'paperclip/railtie'
 
 # mocking Rails.root & Rails.env used in Paperclip::Interploration
 module Rails
@@ -22,8 +21,7 @@ module Rails
   end
 end
 
-# need to manually call this
-Paperclip::Railtie.insert
+ActiveRecord::Base.send(:include, Paperclip::Glue)
 
 # turn off logging
 Paperclip.options[:log] = false
