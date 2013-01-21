@@ -18,11 +18,11 @@ module Paperclip
           serialize :#{name}_dimensions, Hash if respond_to?(:serialize)
 
           def #{name}_dimension(style=:original)
-            self.#{name}_dimensions[style]
+            self.#{name}_dimensions[style.to_s]
           end
 
           def #{name}_dimension_str(style=:original)
-             dim = #{name}_dimension(style)
+             dim = #{name}_dimension(style.to_s)
              dim ? dim.join('x') : nil
           end
         END
@@ -39,7 +39,7 @@ module Paperclip
       styles.each do |style|
         attachment = self.send name
         geo = ::Paperclip::Geometry.from_file(attachment.queued_for_write[style])
-        dimension_hash[style] = [ geo.width.to_i, geo.height.to_i ]
+        dimension_hash[style.to_s] = [ geo.width.to_i, geo.height.to_i ]
       end
       self.send "#{name}_dimensions=", dimension_hash
     end
