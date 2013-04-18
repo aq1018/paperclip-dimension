@@ -1,10 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+
 describe Paperclip::Dimension do
   before(:each) do
     @p = Post.create!({
      :image =>File.open(File.dirname(__FILE__) + '/ruby.png'),
-     :another_image => File.open(File.dirname(__FILE__) + '/ruby.png')
+     :another_image => File.open(File.dirname(__FILE__) + '/ruby.png'),
+     :image_no_styles => File.open(File.dirname(__FILE__) + '/ruby.png')
     })
     @p.reload
   end
@@ -12,8 +14,14 @@ describe Paperclip::Dimension do
   it "should save dimensions" do
     @p.image_dimensions.should_not be_nil
     @p.another_image_dimensions.should_not be_nil
+    @p.image_no_styles_dimensions.should_not be_nil
   end
-
+  
+  it "should accept empty styles hash" do
+    @p.image_no_styles_dimension.should  == [995, 996]
+    @p.image_no_styles_dimension(:original).should == [995, 996]
+    @p.image_no_styles_dimension(:large).should be_nil
+  end
   it "should retreive dimensions correctly" do
     @p.image_dimension.should == [995, 996]
     @p.image_dimension(:original).should == [995, 996]
@@ -41,4 +49,6 @@ describe Paperclip::Dimension do
     @p.another_image_dimension_str(:medium).should == "150x150"
     @p.another_image_dimension_str(:small).should == "30x30"
   end
+ 
 end
+
