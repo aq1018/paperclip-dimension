@@ -1,6 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-
 describe Paperclip::Dimension do
   before(:each) do
     @p = Post.create!({
@@ -49,6 +48,4 @@ describe Paperclip::Dimension do
     @p.another_image_dimension_str(:medium).should == "150x150"
     @p.another_image_dimension_str(:small).should == "30x30"
   end
- 
 end
-
