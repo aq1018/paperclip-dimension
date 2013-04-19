@@ -37,6 +37,7 @@ ActiveRecord::Schema.define do
   create_table :posts do |t|
     t.attachment :image
     t.attachment :another_image
+    t.attachment :image_no_styles
   end
 end
 
@@ -54,6 +55,8 @@ class Post < ActiveRecord::Base
     :medium   =>    ['150x150>',     :jpg],
     :small    =>    ['30x30>',       :jpg]
   }
+  
+  has_attached_file :image_no_styles
 end
 
 
