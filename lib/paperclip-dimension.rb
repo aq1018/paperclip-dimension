@@ -34,7 +34,8 @@ module Paperclip
     def save_dimensions_for(name)
       opts = self.class.attachment_definitions[name]
 
-      styles = opts[:styles].keys + [:original]
+      styles = [:original]
+      styles += opts[:styles].keys if opts[:styles]
       dimension_hash = {}
       styles.each do |style|
         attachment = self.send name
