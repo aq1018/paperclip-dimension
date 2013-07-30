@@ -5,6 +5,12 @@ require 'rspec'
 require 'active_record'
 require 'paperclip'
 require 'paperclip-dimension'
+require 'rbconfig'
+
+# Hack for running Paperclip on Windows
+if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+  Paperclip.options[:command_path] = 'C:\\Program Files\\ImageMagick'
+end
 
 # mocking Rails.root & Rails.env used in Paperclip::Interploration
 module Rails
