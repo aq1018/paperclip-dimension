@@ -32,12 +32,12 @@ module Paperclip
     end
 
     def save_dimensions_for(name)
-      begin
-        # new syntax (version > 3.4.2, commit on 2013-06-14)
-        opts = ::Paperclip::Tasks::Attachments.definitions_for(self.class)[name]
-      rescue
-        # old syntax (version <= 3.4.2)
+      if self.class.respond_to?(:attachment_definitions)
+        # for Paperclip version <= 3.4.2 and >= 3.5.1
         opts = self.class.attachment_definitions[name]
+      else
+        # for Paperclip version 3.5.0
+        opts = ::Paperclip::Tasks::Attachments.definitions_for(self.class)[name]
       end
 
       styles = [:original]
