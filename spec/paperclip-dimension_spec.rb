@@ -3,50 +3,64 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Paperclip::Dimension do
   before(:each) do
     @p = Post.create!({
-     :image =>File.open(File.dirname(__FILE__) + '/ruby.png'),
-     :another_image => File.open(File.dirname(__FILE__) + '/ruby.png'),
-     :image_no_styles => File.open(File.dirname(__FILE__) + '/ruby.png')
+        :image => File.open(File.dirname(__FILE__) + '/ruby.png'),
+        :another_image => File.open(File.dirname(__FILE__) + '/ruby.png'),
+        :image_with_proc => File.open(File.dirname(__FILE__) + '/ruby.png'),
+        :image_no_styles => File.open(File.dirname(__FILE__) + '/ruby.png')
     })
     @p.reload
   end
 
   it "should save dimensions" do
-    @p.image_dimensions.should_not be_nil
-    @p.another_image_dimensions.should_not be_nil
-    @p.image_no_styles_dimensions.should_not be_nil
+    expect(@p.image_dimensions).to_not eq nil
+    expect(@p.another_image_dimensions).to_not eq nil
+    expect(@p.image_with_proc).to_not eq nil
+    expect(@p.image_no_styles_dimensions).to_not eq nil
   end
 
   it "should accept empty styles hash" do
-    @p.image_no_styles_dimension.should  == [995, 996]
-    @p.image_no_styles_dimension(:original).should == [995, 996]
-    @p.image_no_styles_dimension(:large).should be_nil
+    expect(@p.image_no_styles_dimension).to eq [995, 996]
+    expect(@p.image_no_styles_dimension(:original)).to eq [995, 996]
+    expect(@p.image_no_styles_dimension(:large)).to eq nil
   end
 
-  it "should retreive dimensions correctly" do
-    @p.image_dimension.should == [995, 996]
-    @p.image_dimension(:original).should == [995, 996]
-    @p.image_dimension(:large).should == [350, 350]
-    @p.image_dimension(:medium).should == [150, 150]
-    @p.image_dimension(:small).should == [30, 30]
+  it "should retrieve dimensions correctly" do
+    expect(@p.image_dimension).to eq [995, 996]
+    expect(@p.image_dimension(:original)).to eq [995, 996]
+    expect(@p.image_dimension(:large)).to eq [350, 350]
+    expect(@p.image_dimension(:medium)).to eq [150, 150]
+    expect(@p.image_dimension(:small)).to eq [30, 30]
 
-    @p.another_image_dimension.should == [995, 996]
-    @p.another_image_dimension(:original).should == [995, 996]
-    @p.another_image_dimension(:large).should == [350, 350]
-    @p.another_image_dimension(:medium).should == [150, 150]
-    @p.another_image_dimension(:small).should == [30, 30]
+    expect(@p.another_image_dimension).to eq [995, 996]
+    expect(@p.another_image_dimension(:original)).to eq [995, 996]
+    expect(@p.another_image_dimension(:large)).to eq [350, 350]
+    expect(@p.another_image_dimension(:medium)).to eq [150, 150]
+    expect(@p.another_image_dimension(:small)).to eq [30, 30]
+
+    expect(@p.image_with_proc_dimension).to eq [995, 996]
+    expect(@p.image_with_proc_dimension(:original)).to eq [995, 996]
+    expect(@p.image_with_proc_dimension(:large)).to eq [350, 350]
+    expect(@p.image_with_proc_dimension(:medium)).to eq [150, 150]
+    expect(@p.image_with_proc_dimension(:small)).to eq [30, 30]
   end
 
-  it "should retreive dimension strings correctly" do
-    @p.image_dimension_str.should == "995x996"
-    @p.image_dimension_str(:original).should == "995x996"
-    @p.image_dimension_str(:large).should == "350x350"
-    @p.image_dimension_str(:medium).should == "150x150"
-    @p.image_dimension_str(:small).should == "30x30"
+  it "should retrieve dimension strings correctly" do
+    expect(@p.image_dimension_str).to eq "995x996"
+    expect(@p.image_dimension_str(:original)).to eq "995x996"
+    expect(@p.image_dimension_str(:large)).to eq "350x350"
+    expect(@p.image_dimension_str(:medium)).to eq "150x150"
+    expect(@p.image_dimension_str(:small)).to eq "30x30"
 
-    @p.another_image_dimension_str.should == "995x996"
-    @p.another_image_dimension_str(:original).should == "995x996"
-    @p.another_image_dimension_str(:large).should == "350x350"
-    @p.another_image_dimension_str(:medium).should == "150x150"
-    @p.another_image_dimension_str(:small).should == "30x30"
+    expect(@p.another_image_dimension_str).to eq "995x996"
+    expect(@p.another_image_dimension_str(:original)).to eq "995x996"
+    expect(@p.another_image_dimension_str(:large)).to eq "350x350"
+    expect(@p.another_image_dimension_str(:medium)).to eq "150x150"
+    expect(@p.another_image_dimension_str(:small)).to eq "30x30"
+
+    expect(@p.image_with_proc_dimension_str).to eq "995x996"
+    expect(@p.image_with_proc_dimension_str(:original)).to eq "995x996"
+    expect(@p.image_with_proc_dimension_str(:large)).to eq "350x350"
+    expect(@p.image_with_proc_dimension_str(:medium)).to eq "150x150"
+    expect(@p.image_with_proc_dimension_str(:small)).to eq "30x30"
   end
 end
