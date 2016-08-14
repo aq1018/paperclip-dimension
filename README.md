@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/aq1018/paperclip-dimension.svg)](https://travis-ci.org/aq1018/paperclip-dimension) [![Code Climate](https://codeclimate.com/github/aq1018/paperclip-dimension.svg)](https://codeclimate.com/github/aq1018/paperclip-dimension)
+
 paperclip-dimension
 ===================
 
