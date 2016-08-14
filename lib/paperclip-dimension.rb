@@ -32,19 +32,11 @@ module Paperclip
     end
 
     def save_dimensions_for(name)
-      if self.class.respond_to?(:attachment_definitions)
-        # for Paperclip version <= 3.4.2 and >= 3.5.1
-        opts = self.class.attachment_definitions[name]
-      else
-        # for Paperclip version 3.5.0
-        opts = ::Paperclip::Tasks::Attachments.definitions_for(self.class)[name]
-      end
-
-      styles = [:original]
-      styles += opts[:styles].keys if opts[:styles]
       dimension_hash = {}
+      attachment = self.send(name)
+      styles = [:original]
+      styles += attachment.styles.keys if attachment.styles
       styles.each do |style|
-        attachment = self.send name
         geo = ::Paperclip::Geometry.from_file(attachment.queued_for_write[style])
         dimension_hash[style.to_s] = [ geo.width.to_i, geo.height.to_i ]
       end

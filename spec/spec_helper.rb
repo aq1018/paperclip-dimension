@@ -43,6 +43,7 @@ ActiveRecord::Schema.define do
   create_table :posts do |t|
     t.attachment :image
     t.attachment :another_image
+    t.attachment :image_with_proc
     t.attachment :image_no_styles
   end
 end
@@ -50,19 +51,30 @@ end
 # define model
 class Post < ActiveRecord::Base
   extend Paperclip::Dimension::ClassMethods
+
   has_attached_file :image, :styles => {
-    :large    =>    ['350x350>',     :jpg],
-    :medium   =>    ['150x150>',     :jpg],
-    :small    =>    ['30x30>',       :jpg]
+    :large  => ['350x350>', :jpg],
+    :medium => ['150x150>', :jpg],
+    :small  => ['30x30>',   :jpg]
   }
 
   has_attached_file :another_image, :styles => {
-    :large    =>    ['350x350>',     :jpg],
-    :medium   =>    ['150x150>',     :jpg],
-    :small    =>    ['30x30>',       :jpg]
+    :large  =>  ['350x350>', :jpg],
+    :medium => ['150x150>', :jpg],
+    :small  => ['30x30>',   :jpg]
+  }
+
+  has_attached_file :image_with_proc, :styles => Proc.new { |obj|
+    {
+        :large  => ['350x350>', :jpg],
+        :medium => ['150x150>', :jpg],
+        :small  => ['30x30>',   :jpg]
+    }
   }
 
   has_attached_file :image_no_styles
+
+  %i(image another_image image_with_proc image_no_styles).each do |field|
+    validates_attachment_content_type field, :content_type => ['image/png']
+  end
 end
-
-
