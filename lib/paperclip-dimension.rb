@@ -34,6 +34,7 @@ module Paperclip
     def save_dimensions_for(name)
       dimension_hash = {}
       attachment = self.send(name)
+      return unless attachment.content_type =~ %r{^(image|(x-)?application)/(bmp|gif|jpeg|jpg|pjpeg|png|x-png)$}
       styles = [:original]
       styles += attachment.styles.keys if attachment.styles
       styles.each do |style|
